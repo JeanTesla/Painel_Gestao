@@ -6,9 +6,6 @@ var donut = Highcharts.chart('grafico_donut', {
             alpha: 45
         },
         backgroundColor: '#f8f9fc',
-        click: function() {
-            console.log('Meu ovo')
-        }
     },
     title: {
         text: 'Vencimento de Contratos Por Período'
