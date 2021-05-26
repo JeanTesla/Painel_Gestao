@@ -1,0 +1,115 @@
+.conteudoPrincipal {
+    margin: 30px;
+}
+
+.input-container {
+    position: relative;
+}
+
+.input1 {
+    border: 0;
+    border-bottom: 2px solid #9e9e9e;
+    outline: none;
+    transition: .2s ease-in-out;
+    box-sizing: border-box;
+}
+
+.label1 {
+    top: 0;
+    left: 0;
+    right: 0;
+    color: #616161;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    font-size: 1rem;
+    cursor: text;
+    transition: .2s ease-in-out;
+    box-sizing: border-box;
+}
+
+.input1,
+.label1 {
+    width: 100%;
+    height: 3rem;
+    font-size: 1rem;
+}
+
+.cardCor_cinza {
+    background: linear-gradient(to right, #a9adb0, #a6aaad);
+}
+
+.cardCor_vermelho {
+    background: linear-gradient(to right, #F45B5B, #e85656);
+}
+
+.cardCor_verde {
+    background: linear-gradient(to right, #7abd4d, #70ad47);
+}
+
+.cardCor_azul {
+    background: linear-gradient(to right, #4561ff, #3a58fd);
+}
+
+.cardCor_amarelo {
+    background: linear-gradient(to right, #d8d537, #ccc92f);
+}
+
+.badge {
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.alinhamentoBadges {
+    display: flex;
+    justify-content: space-around;
+}
+
+.toast {
+    position: absolute;
+    margin-left: 65%;
+    z-index: 999;
+}
+
+.toast-header {
+    width: 400px;
+    background: linear-gradient(to right, #5cc265, #0f860b);
+    font-size: 20px;
+}
+
+.toast-body {
+    background: linear-gradient(to right, #5cc265, #0f860b);
+    font-size: 16px;
+    width: 400px;
+    font-weight: bold;
+    color: black;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.blink {
+    -webkit-animation: blink 2s linear infinite;
+    -moz-animation: blink 2s linear infinite;
+    -ms-animation: blink 2s linear infinite;
+    -o-animation: blink 2s linear infinite;
+    animation: blink 2s linear infinite;
+}

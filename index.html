@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app='painelGestao'>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Painel De Gestão</title>
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="css/painelGestao.css" rel="stylesheet">
+
+
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="js/lib/angular/angular.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/controllers/prestadorCtrl.js"></script>
+    <script src="js/controllers/contratoCtrl.js"></script>
+    <script src="js/controllers/dashboardCtrl.js"></script>
+    <script src="js/services/prestadoresAPIService.js"></script>
+    <script src="js/services/contratosAPIService.js"></script>
+    <script src="js/services/dashboardAPIService.js"></script>
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <ul class="nav navbar-nav bg-gradient-primary sidebar sidebar-dark">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div>
+                <div class="sidebar-brand-text mx-2">Meu Painel</div>
+            </a>
+            <hr class="sidebar-divider my-0">
+            <li class="nav-item active"><a class="nav-link" id="home-tab" data-toggle="tab" href="#nav_dashboard"><i class="fas fa-fw fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">Prestadores</div>
+            <li class="nav-item"><a class="nav-link" href="#nav_cadastroPrestador" data-toggle="tab" aria-expanded="true"><i class="fas fa-fw fa-cog"></i><span>Cadastro</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="#nav_utilidadePrestador" data-toggle="tab" aria-expanded="true"><i class="fas fa-fw fa-wrench"></i><span>Utilidades</span></a></li>
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">Contratos</div>
+            <li class="nav-item"><a class="nav-link" href="#nav_cadastroContrato" data-toggle="tab" aria-expanded="true"><i class="fas fa-fw fa-folder"></i><span>Cadastro</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="#nav_utilidadeContrato" data-toggle="tab"><i class=" fas fa-fw fa-chart-area "></i><span>Utilidades</span></a></li>
+            <hr class="sidebar-divider d-none d-md-block ">
+            <div class="text-center d-none d-md-inline ">
+                <button class="rounded-circle border-0 " id="sidebarToggle "></button>
+            </div>
+        </ul>
+
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper">
+
+            <!-- Main Content -->
+            <div id="content" class='conteudoPrincipal'>
+                <!------------ TOAST ------------->
+                <!------------ TOAST ------------->
+                <div role="alert" aria-live="assertive" aria-atomic="true" class="toast blink hide" data-autohide="false">
+                    <div class="toast-header">
+                        <i style='color: black;' class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+                        <b style='color: black;' class="mr-auto">&nbspAviso</b>
+                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="toast-body" id='div_toastBody'>
+                        <!-- RV - JS -->
+                    </div>
+                </div>
+
+                <div class="tab-content" id="myTabContent">
+
+
+
+                    <!-- -------------------- DASHBOARD ----------------------->
+                    <!-- -------------------- DASHBOARD ----------------------->
+                    <!-- -------------------- DASHBOARD ----------------------->
+                    <div class="tab-pane fade show active" id="nav_dashboard" role="tab" ng-controller='dashboardController'>
+
+                        <div class="row">
+                            <div class="col-sm">
+                                <div class="border rounded p-2 mt-1 shadow text-white  cardCor_verde">
+                                    <div style="font-size: 20px">Vencem em 30 dias </div>
+                                    <div id="div_porcentHoje" style="font-size: 40px" class="mt-0 mb-0 text-center class_cardPorcent">{{cards.pctExpiraem30}}%</div>
+                                    <div class="row">
+                                        <div class="col-sm text-right">
+                                            <div id="div_valoresHoje" style="font-size: 18px;" class="mt-1 pl-1 class_cardInfo">{{cards.expiraem30}} de {{cards.totalContratos}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm pl-0">
+
+                                <div class="border rounded p-2 mt-1 shadow text-white cardCor_azul">
+                                    <div style="font-size: 20px">Vencem em 15 dias</div>
+                                    <div id="div_porcent1a2" style="font-size: 40px" class="mt-0 mb-0 text-center class_cardPorcent">{{cards.pctExpiraem15}}%</div>
+                                    <div class="row">
+                                        <div class="col-sm text-right">
+                                            <div id="div_valores1a2" style="font-size: 18px;" class="mt-1 pl-1 class_cardInfo">{{cards.expiraem15}} de {{cards.totalContratos}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm pl-0">
+
+                                <div class="border rounded p-2 mt-1 shadow text-white cardCor_amarelo">
+                                    <div style="font-size: 20px">Vencem em 7 dias</div>
+                                    <div id="div_porcent3a4" style="font-size: 40px" class="mt-0 mb-0 text-center class_cardPorcent">{{cards.pctExpiraem7}}%</div>
+                                    <div class="row">
+                                        <div class="col-sm text-right">
+                                            <div id="div_valores3a4" style="font-size: 18px;" class="mt-1 pl-1 class_cardInfo">{{cards.expiraem7}} de {{cards.totalContratos}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm pl-0">
+                                <div class="border rounded p-2 mt-1 shadow text-white cardCor_vermelho">
+                                    <div style="font-size: 20px">Vencem Hoje</div>
+                                    <div id="div_porcent5a6" style="font-size: 40px" class="mt-0 mb-0 text-center class_cardPorcent" ng-model='cards.pctExpiraHoje'>{{cards.pctExpiraHoje}}%</div>
+                                    <div class="row">
+                                        <div class="col-sm text-right">
+                                            <div id="div_valores5a6" style="font-size: 18px;" class="mt-1 pl-1 class_cardInfo">{{cards.expiraHoje}} de {{cards.totalContratos}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm pl-0">
+                                <div class="border rounded p-2 mt-1 shadow text-white cardCor_cinza">
+                                    <div style="font-size: 20px">Outros</div>
+                                    <div id="div_porcent5a6" style="font-size: 40px" class="mt-0 mb-0 text-center class_cardPorcent">{{cards.pctOutrosDias}}%</div>
+                                    <div class="row">
+                                        <div class="col-sm text-right">
+                                            <div id="div_valores5a6" style="font-size: 18px;" class="mt-1 pl-1 class_cardInfo">{{cards.outrosDias}} de {{cards.totalContratos}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <!-------------  PROGRESS BAR DOS CONTRATOS ----------------->
+                        <!-------------  PROGRESS BAR DOS CONTRATOS ----------------->
+
+                        <div class='row'>
+                            <div class="col-md-6 border-right">
+                                <p class="text-center">
+                                    <strong>Dias Restantes - Contratos</strong>
+                                </p>
+
+                                <div ng-repeat='bar in dadosProgressBar'>
+                                    <div class="progress-group mt-2" style='height: 40px;'>
+                                        <b>Ctr-{{bar.idcontrato}}</b> | {{bar.nomerzsocial}} <span style='font-size: 10px;'>{{bar.datainicio}} até {{bar.datafim}}</span>
+                                        <span class="float-right"><b>{{bar.diaspassados}}</b>/{{bar.diastotais}}</span>
+                                        <div class="progress progress-sm" style='height: 20px;'>
+                                            <div class="progress-bar" ng-class="bar.classBar" style='width: 0px;' ng-style="{'width':bar.pctdiasPassados}">Expira em {{bar.expiraem}} dias</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div ng-if='countArrays(dadosProgressBar)' class="alert alert-primary text-center" role="alert">
+                                    Nenhum contrato Ativo / Cadastrado
+                                </div>
+
+                            </div>
+
+
+                            <div class='col-md-6'>
+                                <!-- --------------------- GRÁFICO DONUT ---------------------->
+                                <!-- --------------------- GRÁFICO DONUT ---------------------->
+                                <div class='alinhamentoBadges'>
+                                    <span class="badge cardCor_cinza text-white" ng-click="filterDonut(-1)">Todos</span>
+                                    <span class="badge cardCor_verde text-white" ng-click="filterDonut(30)">30 dias</span>
+                                    <span class="badge cardCor_azul text-white" ng-click="filterDonut(15)">15 dias</span>
+                                    <span class="badge cardCor_amarelo text-white" ng-click="filterDonut(7)">7 dias</span>
+                                    <span class="badge cardCor_vermelho text-white" ng-click="filterDonut(0)">hoje</span>
+                                </div>
+
+                                <div id='grafico_donut'>
+                                    <!-- RV - SJ -->
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <!-------- MODAL - DADOS CONTRATO - DASHBOARD ------- -->
+                        <!-------- MODAL - DADOS CONTRATO - DASHBOARD ------- -->
+                        <!-------- MODAL - DADOS CONTRATO - DASHBOARD ------- -->
+                        <div class="modal fade" id='modal_dadosContratoDashboard' tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-xl" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Informações</b>
+                                        </h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table table-striped table-hover mt-1 ">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Contrato</th>
+                                                    <th scope="col">Prestador</th>
+                                                    <th scope="col">CPF/CNPJ</th>
+                                                    <th scope="col">Expira Em</th>
+                                                    <th scope="col">Inicio Em</th>
+                                                    <th scope="col">Termina em</th>
+                                                    <th scope="col">Data Cadastro</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id='tbody_modalDadosContratoDashboard'>
+                                                <!-- RV - JS -->
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <!-- ------------- CADASTRO DE PRESTADORES ---------------->
+                    <!-- ------------- CADASTRO DE PRESTADORES ---------------->
+                    <!-- ------------- CADASTRO DE PRESTADORES ---------------->
+                    <div class="tab-pane fade" id="nav_cadastroPrestador" role="tab" ng-controller='prestadorController'>
+                        <div class='row'>
+                            <div class='col'>
+                                <div class='row'>
+                                    <div class='col'>
+                                        <h4>Cadastro de Prestadores </h4>
+                                    </div>
+                                </div>
+                                <!-- {{prestador}} -->
+                                <form name='cadastroPrestadorForm'>
+                                    <div class='row'>
+                                        <div class='col-md-3'>
+                                            <div class="form-group form-group-sm">
+                                                <label for="exampleFormControlSelect1">Tipo</label>
+                                                <select class="form-control" ng-model='prestador.tipo'>
+                                                  <option value='' hidden>Selecione...</option>
+                                                  <option value='F'>Pessoa Física</option>
+                                                  <option value='J'>Pessoa Jurídica</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class='col-md'>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">CPF/CNPJ</label>
+                                                <input type="text" class="form-control" name="inputcpfCnpj" required ng-model='prestador.cpfcnpj' placeholder="{{verificarTipoPessoa(prestador.tipo).strCpfCnpj}}">
+                                            </div>
+                                        </div>
+                                        <div class='col-md'>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Nome/Razão Social</label>
+                                                <input type="text" class="form-control" name="inputnomeRzSocial" required ng-model='prestador.nomerzsocial' placeholder="{{verificarTipoPessoa(prestador.tipo).strNomeRzSocial}}">
+                                            </div>
+                                        </div>
+                                        <div class='col-md'>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">E-mail</label>
+                                                <input type="email" class="form-control" name="inputEmail" required ng-model='prestador.email' placeholder="Informe o E-mail">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='row'>
+
+                                        <div class='col-md'>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">CEP</label>
+                                                <input type="number" class="form-control" name="inputCEP" minlength="8" maxlength="8" required ng-model='prestador.cep' ng-keyup="getCep(prestador)" placeholder="Informe o CEP">
+                                            </div>
+                                        </div>
+                                        <div class='col-md '>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Complemento</label>
+                                                <input type="text" class="form-control" name="inputComplemento" ng-model='prestador.complemento ' placeholder="Complemento (opcional)">
+                                            </div>
+                                        </div>
+                                        <div class='col-md-4 '>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Logradouro</label>
+                                                <input type="text" class="form-control" name="inputLogradouro" required ng-model='prestador.logradouro ' placeholder="Informe a Rua">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class='row '>
+                                        <div class='col-md '>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Bairro</label>
+                                                <input type="text" class="form-control" name="inputBairro" required ng-model='prestador.bairro ' placeholder="Informe o Bairro">
+                                            </div>
+                                        </div>
+                                        <div class='col-md '>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Cidade</label>
+                                                <input type="text" class="form-control" name="inputCidade" required ng-model='prestador.cidade ' placeholder="Informe a Cidade">
+                                            </div>
+                                        </div>
+                                        <div class='col-md-2 '>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Número</label>
+                                                <input type="text" class="form-control" name="inputNumero" required ng-model='prestador.numero ' placeholder="Número">
+                                            </div>
+                                        </div>
+                                        <div class='col-md-2 '>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">UF</label>
+                                                <input type="text" class="form-control" name="inputUf" required ng-model='prestador.uf ' minlength="2" maxlength="2" placeholder="UF">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <div class='row '>
+                                    <div class='col text-center '>
+                                        <button type="button" class="btn btn-primary" ng-disabled='!validarFormulario(cadastroPrestadorForm) ' ng-click='cadastrarPrestador(prestador) '>Cadastrar</button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class='col border-left '>
+                                <div class='row '>
+                                    <div class='col '>
+                                        <h4>Cadastrados</h4>
+                                    </div>
+                                    <div class='col '>
+                                        <div class="form-group form-group-sm">
+                                            <input type="text" class="form-control form-control-sm" required ng-model='filtroPrestCad' placeholder="O que está procurando?">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <table class="table table-striped table-hover mt-1" id='table_prestadoresAtivos' datatable="ng">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Nome</th>
+                                            <th scope="col">Tipo</th>
+                                            <th scope="col">CPF/CNPJ</th>
+                                            <th scope="col" class='text-center '>#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat='prestador in prestadoresAtivos | filter:filtroPrestCad'>
+                                            <td>{{prestador.nomerzsocial}}</td>
+                                            <td>{{prestador.tipopessoa}}</td>
+                                            <td>{{prestador.cpfcnpj}}</td>
+                                            <td colspan="2" class='text-center '>
+                                                <i class="fa fa-eye" style='cursor: pointer; ' title='Visualizar dados desse prestador' ng-click='modalPrest(prestador) '></i>
+                                                <i class="fas fa-trash" title='Cancelar cadastro desse prestador' style='color: brown; cursor: pointer; margin-left: 20px; ' ng-click='excluirPrestador(prestador) '></i>
+                                            </td>
+                                        </tr>
+                                        <tr ng-if='countArrays(prestadoresAtivos)'>
+                                            <td colspan='4' class='text-center'> Não há prestadores Cadastrados / Ativos </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                        <!-------- MODAL - DADOS PRESTADORES CADASTRADOS ------- -->
+                        <!-------- MODAL - DADOS PRESTADORES CADASTRADOS ------- -->
+                        <div class="modal fade" id='modal_vizPrest' tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-xl" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Informações de {{presTempData.nomerzsocial}}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <table class="table table-responsive table-striped table-hover mt-2">
+                                            <thead>
+                                                <tr class=' '>
+                                                    <th scope="col">Nome</th>
+                                                    <th scope="col">Tipo</th>
+                                                    <th scope="col">CPF/CNPJ</th>
+                                                    <th scope="col">Email</th>
+                                                    <th scope="col">CEP</th>
+                                                    <th scope="col">complemento</th>
+                                                    <th scope="col">Logradouro</th>
+                                                    <th scope="col">Bairro</th>
+                                                    <th scope="col">Cidade</th>
+                                                    <th scope="col">Numero</th>
+                                                    <th scope="col">UF</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{presTempData.nomerzsocial}}</td>
+                                                    <td>{{presTempData.tipopessoa}}</td>
+                                                    <td>{{presTempData.cpfcnpj}}</td>
+                                                    <td>{{presTempData.email}}</td>
+                                                    <td>{{presTempData.cep}}</td>
+                                                    <td>{{presTempData.complemento}}</td>
+                                                    <td>{{presTempData.logradouro}}</td>
+                                                    <td>{{presTempData.bairro}}</td>
+                                                    <td>{{presTempData.cidade}}</td>
+                                                    <td>{{presTempData.numero}}</td>
+                                                    <td>{{presTempData.uf}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- ------------- UTILIDADES PRESTADORES ---------------->
+                    <!-- ------------- UTILIDADES PRESTADORES ---------------->
+                    <!-- ------------- UTILIDADES PRESTADORES ---------------->
+                    <div class="tab-pane fade" id="nav_utilidadePrestador" role="tab" ng-controller='prestadorController'>
+                        {{prestadores}}
+
+                        <div class='row'>
+                            <div class='col'>
+                                <h4> Prestadores Deletados </h4>
+                            </div>
+                            <div class='col-3 text-right'>
+                                <div class="form-group form-group-sm">
+                                    <input type="text" class="form-control form-control-sm" required ng-model='filtroPrestCadCanc' placeholder="O que está procurando?">
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="table table-striped table-hover mt-1">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nome</th>
+                                    <th scope="col">Tipo</th>
+                                    <th scope="col">CPF/CNPJ</th>
+                                    <th scope="col" class='text-center '>#</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat='prestador in prestadoresCancelados | filter:filtroPrestCadCanc'>
+                                    <td>{{prestador.nomerzsocial}}</td>
+                                    <td>{{prestador.tipopessoa}}</td>
+                                    <td>{{prestador.cpfcnpj}}</td>
+                                    <td class='text-center '>
+                                        <i class="fa fa-share" style='cursor: pointer; ' title="Recuperar esse prestador" ng-click='recuperarPrestador(prestador) '></i>
+                                    </td>
+                                </tr>
+                                <tr ng-if='countArrays(prestadoresCancelados)'>
+                                    <td colspan='4' class='text-center'> Não há prestadores Cancelados </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- ------------- CADASTRO DE CONTRATOS ---------------->
+                    <!-- ------------- CADASTRO DE CONTRATOS ---------------->
+                    <!-- ------------- CADASTRO DE CONTRATOS ---------------->
+                    <div class="tab-pane fade" id="nav_cadastroContrato" role="tab" ng-controller='contratoController'>
+                        <div class='row'>
+                            <div class='col'>
+                                <div class='row'>
+                                    <div class='col'>
+                                        <h4>Cadastro de Contratos </h4>
+                                    </div>
+                                </div>
+                                <!-- {{prestador}} -->
+                                <form name='cadastroContratoForm'>
+                                    <input type="hidden" ng-model='contrato.idPrestador' />
+                                    <div class='row'>
+                                        <div class='col-md'>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Prestador</label><br>
+                                                <button type="button" id='exampleInputEmail1' ng-click='modalSelecionarPrestador()' class="btn btn-outline-primary btn-block">Buscar</button>
+                                            </div>
+                                        </div>
+                                        <div class='col-md'>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Nome/Razão Social</label>
+                                                <input type="text" class="form-control" required ng-model='contrato.nomerzsocialprestador' disabled placeholder="Nome ou Razão Social">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='row'>
+                                        <div class='col-md'>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Serviço Prestado</label>
+                                                <input type="text" class="form-control" required ng-model='contrato.servicoprestado' placeholder="Serviço que será prestado">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='row'>
+                                        <div class='col-md'>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Data Inicio</label>
+                                                <input type="date" class="form-control" min="{{dataAtual | date:'yyyy-MM-dd'}}" ng-model='contrato.datainicio' required>
+                                            </div>
+                                        </div>
+                                        <div class='col-md'>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Data Fim</label>
+                                                <input type="date" class="form-control" min="{{dataAtual | date:'yyyy-MM-dd'}}" ng-model='contrato.datafim' required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <div class='row '>
+                                    <div class='col text-center '>
+                                        <button type="button" class="btn btn-primary" ng-disabled='!validarFormulario(cadastroContratoForm) ' ng-click='cadastrarContrato(contrato) '>Cadastrar</button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class='col border-left '>
+                                <div class='row '>
+                                    <div class='col '>
+                                        <h4>Cadastrados</h4>
+                                    </div>
+                                    <div class='col '>
+                                        <div class="form-group form-group-sm">
+                                            <input type="text" class="form-control form-control-sm" required ng-model='filtroPrestCad' placeholder="O que está procurando?">
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table table-striped table-hover mt-1">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Contrato</th>
+                                            <th scope="col">Prestador</th>
+                                            <th scope="col">CPF/CNPJ</th>
+                                            <th scope="col">Expira Em</th>
+                                            <th scope="col" class='text-center '>#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat='contrato in contratosAtivos | filter:filtroPrestCad'>
+                                            <td>Ctr-{{contrato.idcontrato}}</td>
+                                            <td>{{contrato.nomerzsocial}}</td>
+                                            <td>{{contrato.cpfcnpj}}</td>
+                                            <td>{{contrato.expiraem}} dias</td>
+                                            <td colspan="2" class='text-center '>
+                                                <i class="fa fa-eye" style='cursor: pointer; ' title='Visualizar dados desse contrato' ng-click='modalContrato(contrato) '></i>
+                                                <i class="fas fa-trash" title='Cancelar cadastro desse contrato' style='color: brown; cursor: pointer; margin-left: 20px; ' ng-click='excluirContrato(contrato) '></i>
+                                            </td>
+                                        </tr>
+                                        <tr ng-if='countArrays(contratosAtivos)'>
+                                            <td colspan='4' class='text-center'> Não há Contratos cadastrados / Ativos </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+
+
+
+                        <!-------- MODAL - DADOS PRESTADORES CADASTRADOS ------- -->
+                        <!-------- MODAL - DADOS PRESTADORES CADASTRADOS ------- -->
+                        <!-------- MODAL - DADOS PRESTADORES CADASTRADOS ------- -->
+                        <div class="modal fade" id='modal_cadContratoPrestador' tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-xl" role="document">
+                                <div class="modal-content">
+
+                                    <div class="modal-body">
+                                        <div class='row'>
+                                            <div class='col'>
+                                                <h4>Consulta de Prestadores</h4>
+                                            </div>
+                                            <div class='col-4'>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" ng-model='consultaPrestador.cpfcnpj' ng-keyup='consultarPrestador(consultaPrestador)' placeholder="CPF/CNPJ do prestador">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <table class="table table-striped table-hover mt-2">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Nome</th>
+                                                    <th scope="col">Tipo</th>
+                                                    <th scope="col">CPF/CNPJ</th>
+                                                    <th scope="col">Email</th>
+                                                    <th scope="col">#</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat='prestador in prestadoresAtivos'>
+                                                    <td>{{prestador.nomerzsocial}}</td>
+                                                    <td>{{prestador.tipopessoa}}</td>
+                                                    <td>{{prestador.cpfcnpj}}</td>
+                                                    <td>{{prestador.email}}</td>
+                                                    <td><i class="fa fa-link" ng-click='selecionarPrestador(prestador)' title='Selecionar esse Prestador' style='cursor: pointer;' aria-hidden="true"></i></td>
+                                                </tr>
+                                                <tr ng-if='countArrays(prestadoresAtivos)'>
+                                                    <td colspan='5' class='text-center'> Não há Prestadores Cadastrados / Ativos</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <!-------- MODAL - DADOS CONTRATO ------- -->
+                        <!-------- MODAL - DADOS CONTRATO ------- -->
+                        <!-------- MODAL - DADOS CONTRATO ------- -->
+                        <div class="modal fade" id='modal_dadosContrato' tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-xl" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Informações do contrato <b>Crt-{{ctrTempData.idcontrato}}</b></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table table-striped table-hover mt-1">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Contrato</th>
+                                                    <th scope="col">Prestador</th>
+                                                    <th scope="col">CPF/CNPJ</th>
+                                                    <th scope="col">Expira Em</th>
+                                                    <th scope="col">Inicio Em</th>
+                                                    <th scope="col">Termina em</th>
+                                                    <th scope="col">Data Cadastro</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Ctr-{{ctrTempData.idcontrato}}</td>
+                                                    <td>{{ctrTempData.nomerzsocial}}</td>
+                                                    <td>{{ctrTempData.cpfcnpj}}</td>
+                                                    <td>{{ctrTempData.expiraem}} dias</td>
+                                                    <td>{{ctrTempData.datainicio}}</td>
+                                                    <td>{{ctrTempData.datafim}}</td>
+                                                    <td>{{ctrTempData.datacadastro}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Sair</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- ------------- UTILIDADES CONTRATOS ---------------->
+                    <!-- ------------- UTILIDADES CONTRATOS ---------------->
+                    <!-- ------------- UTILIDADES CONTRATOS ---------------->
+                    <div class="tab-pane fade" id="nav_utilidadeContrato" role="tab" ng-controller='contratoController'>
+                        <div class=' row '>
+                            <div class='col '>
+                                <h4>Contratos Deletados</h4>
+                            </div>
+                            <div class='col '>
+                                <div class="form-group form-group-sm">
+                                    <input type="text" class="form-control form-control-sm" required ng-model='filtroCtrDeletados ' placeholder="O que está procurando?">
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-striped table-hover mt-1">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Contrato</th>
+                                    <th scope="col">Prestador</th>
+                                    <th scope="col">CPF/CNPJ</th>
+                                    <th scope="col">Expira Em</th>
+                                    <th scope="col" class='text-center '>#</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat='contrato in contratosCancelados | filter:filtroCtrDeletados '>
+                                    <td>Ctr-{{contrato.idcontrato}}</td>
+                                    <td>{{contrato.nomerzsocial}}</td>
+                                    <td>{{contrato.cpfcnpj}}</td>
+                                    <td>{{contrato.expiraem}} dias</td>
+                                    <td colspan="2" class='text-center '> <i class="fa fa-share" style='cursor: pointer; ' title="Recuperar esse contrato" ng-click='recuperarContrato(contrato) '></i>
+                                    </td>
+                                </tr>
+                                <tr ng-if='countArrays(contratosCancelados)'>
+                                    <td colspan='5' class='text-center'> Não há Contratos Cancelados</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/highchartsScripts/donut.js"></script>
+    <script src="js/notifications/expiraEm.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+
+
+</body>
+
+</html>
